@@ -4,45 +4,1539 @@
 	"Version"		"1"
 
 	//=================================================================================================================
-	// Templar Assassin: Refraction Holdout
+	// 幻影刺客-窒息之刃
 	//=================================================================================================================
-	"templar_assassin_refraction_holdout"
+	"phantom_assassin_stifling_dagger_om"
 	{
 		// General
 		//-------------------------------------------------------------------------------------------------------------
-		"AbilityBehavior"				"DOTA_ABILITY_BEHAVIOR_NO_TARGET | DOTA_ABILITY_BEHAVIOR_IMMEDIATE"
-		"AbilityUnitDamageType"			"DAMAGE_TYPE_PHYSICAL"	
+		"BaseClass"              		"ability_datadriven"
+		"AbilityBehavior"				"DOTA_ABILITY_BEHAVIOR_UNIT_TARGET | DOTA_ABILITY_BEHAVIOR_AOE"
+		"AbilityUnitTargetTeam"			"DOTA_UNIT_TARGET_TEAM_ENEMY"
+		"AbilityUnitTargetType"			"DOTA_UNIT_TARGET_HERO | DOTA_UNIT_TARGET_BASIC"
+		"AbilityUnitDamageType"			"DAMAGE_TYPE_PURE"	
+		"SpellImmunityType"				"SPELL_IMMUNITY_ENEMIES_NO"
+
+		"AbilityTextureName"            "phantom_assassin_stifling_dagger"
 
 		// Casting
 		//-------------------------------------------------------------------------------------------------------------
-		"AbilityCastPoint"				"0.0 0.0 0.0 0.0"
+		"AoERadius"                 	"%radius"
+		"AbilityCastRange"				"1200"
+		"AbilityCastPoint"				"0.3 0.3 0.3 0.3"
+		"AbilityCastAnimation"     		"ACT_DOTA_CAST_ABILITY_1"
+		
+		// Time		
+		//-------------------------------------------------------------------------------------------------------------
+		"AbilityCooldown"				"6"
+		"AbilityDuration"				"1.0 2.0 3.0 4.0"
+	
+		// Cost
+		//-------------------------------------------------------------------------------------------------------------
+		"AbilityManaCost"				"30 25 20 15"
+
+		"precache"
+		{
+			"soundfile"			"soundevents/game_sounds_heroes/game_sounds_phantom_assassin.vsndevts"
+			"particle"			"particles/units/heroes/hero_phantom_assassin/phantom_assassin_stifling_dagger.vpcf"
+			"particle"			"particles/units/heroes/hero_phantom_assassin/phantom_assassin_stifling_dagger_debuff.vpcf"
+		}
+
+		"OnSpellStart"
+		{
+			"TrackingProjectile"
+			{
+				"Target"		"TARGET"
+                //"Target"				"TARGET"                  //投射物目标
+			     "EffectName"			"particles/units/heroes/hero_phantom_assassin/phantom_assassin_stifling_dagger.vpcf"
+			     "Dodgeable"			"1"   //是否可以闪避
+			     "ProvidesVision"		"1"   //投射物是否提供视野，只有0和1
+			     "VisionRadius"			"300"        //投射物提供多大的视野范围
+			     "MoveSpeed"			"%dagger_speed"     //投射速率，如果是魔兽WE过来的就很清楚了
+			     "SourceAttachment"		"DOTA_PROJECTILE_ATTACHMENT_ATTACK_2"   //从那个地方发射出去，我是这么理解的
+			}
+
+			"FireSound"
+			{
+		        "EffectName"   "Hero_PhantomLancer.SpiritLance.Throw"
+		        "Target"       "CASTER"
+			}
+		}
+
+		"OnProjectileHitUnit"
+		{
+		   "ApplyModifier"
+	        {
+	                "ModifierName"        "modifier_phantom_assassin_stifling_dagger_om_slow"
+	                "Target"              "TARGET"
+	        }
+
+			"FireSound"
+			{
+		        "EffectName"		"Hero_PhantomAssassin.Dagger.Target"
+		        "Target"			"TARGET"
+			}
+
+			"RunScript"
+			{
+				"ScriptFile"		"scripts/vscripts/heroes/hero_phantom_assassin/phantom_assassin_stifling_dagger_om.lua"
+				"Function"			"phantom_assassin_stifling_dagger_om"
+				"Target"
+				{
+					"Center"  		"TARGET"
+					"Radius" 		"%radius"
+					"Teams" 		"DOTA_UNIT_TARGET_TEAM_ENEMY"
+					"Types" 		"DOTA_UNIT_TARGET_HERO | DOTA_UNIT_TARGET_BASIC"
+				}
+			}
+
+		}
+		"Modifiers"
+		{
+			"modifier_phantom_assassin_stifling_dagger_om_slow"
+			{
+				"IsDebuff"		"1"
+				"Duration"		"%duration"
+
+				"EffectName"	"particles/units/heroes/hero_phantom_assassin/phantom_assassin_stifling_dagger_debuff.vpcf"
+				"EffectAttachType"	"follow_origin"
+
+				"Properties"
+				{
+					"MODIFIER_PROPERTY_MOVESPEED_BONUS_PERCENTAGE"		"%move_slow"
+				}
+			}
+		}
+
+		// Special	
+		//-------------------------------------------------------------------------------------------------------------
+		"AbilitySpecial"
+		{
+			"01"//减速比例
+			{
+				"var_type"				"FIELD_INTEGER"
+				"move_slow"				"-50"
+			}
+			"02"//飞镖速度
+			{
+				"var_type"				"FIELD_INTEGER"
+				"dagger_speed"			"1200"
+			}
+			"03"//减速时间
+			{
+				"var_type"				"FIELD_INTEGER"
+				"duration"				"1 2 3 4"
+			}
+			"04"//对英雄伤害
+			{
+				"var_type"				"FIELD_INTEGER"
+				"hero_damage"			"30 50 70 90"
+			}
+			"05"//对普通单位伤害
+			{
+				"var_type"				"FIELD_INTEGER"
+				"creep_damage"			"60 100 140 180"
+			}
+			"06"//扩散范围
+			{
+				"var_type"              "FIELD_FLOAT"
+       			"radius"                "300 300 300 300"            //四个技能等级的眩晕和伤害作用范围
+			}
+
+		}
+	}
+	//=================================================================================================================
+	// 克林克兹-扫射
+	//=================================================================================================================
+	"clinkz_strafe_om"
+	{
+		// General
+		//-------------------------------------------------------------------------------------------------------------
+		"BaseClass"						"ability_datadriven"
+		"AbilityBehavior"				"DOTA_ABILITY_BEHAVIOR_NO_TARGET | DOTA_ABILITY_BEHAVIOR_IMMEDIATE | DOTA_ABILITY_BEHAVIOR_IGNORE_CHANNEL"
+		"FightRecapLevel"				"1"
+
+		"AbilityTextureName"			"clinkz_strafe"
 
 		// Time		
 		//-------------------------------------------------------------------------------------------------------------
-		"AbilityCooldown"				"17.0 17.0 17.0 17.0"
-
+		"AbilityCooldown"				"40.0 35.0 30.0 25.0"
+		"AbilityCastPoint"				"0.0 0.0 0.0 0.0"
+		
 		// Cost
 		//-------------------------------------------------------------------------------------------------------------
-		"AbilityManaCost"				"100"
+		"AbilityManaCost"				"90 90 90 90"
 		
+		// Special
+		//-------------------------------------------------------------------------------------------------------------
+		"AbilitySpecial"
+		{
+			"01"//持续时间
+			{
+				"var_type"					"FIELD_FLOAT"
+				"duration"					"4.0 6.0 8.0 10.0"
+			}
+			"02"//增加攻速
+			{
+				"var_type"					"FIELD_INTEGER"
+				"attack_speed_bonus_pct"	"130"
+			}
+			"03"//扩散范围
+			{
+				"var_type"              "FIELD_INTEGER"
+       			"radius"                "300"           
+			}
+		}
+
+		"precache"
+		{
+			"particle"  "particles/units/heroes/hero_clinkz/clinkz_strafe_fire.vpcf"
+			"soundfile" "soundevents/game_sounds_heroes/game_sounds_clinkz.vsndevts"
+		}
+
+		"OnSpellStart"
+		{
+			"FireEffect"
+			{
+				"EffectName"        "particles/units/heroes/hero_clinkz/clinkz_strafe_fire.vpcf"
+				"EffectAttachType"  "follow_origin"
+				"Target"            "CASTER"
+			}
+	
+			"FireSound"
+			{
+				"EffectName"	"Hero_Clinkz.Strafe"
+				"Target" 		"CASTER"
+			}
+	
+			"ApplyModifier"
+			{
+				"ModifierName"	"modifier_clinkz_strafe_om_attackspeed"
+				"Target" 		"CASTER"
+				"Duration"		"%duration"
+				
+			}
+		}
+
+		"Modifiers"
+		{
+			"modifier_clinkz_strafe_om_attackspeed"
+			{
+				"EffectName"		"particles/units/heroes/hero_clinkz/clinkz_strafe.vpcf"
+				"EffectAttachType"	"follow_origin"
+		
+				"Properties"
+				{
+					"MODIFIER_PROPERTY_ATTACKSPEED_BONUS_CONSTANT" "%attack_speed_bonus_pct"
+				}
+
+				"OnAttackLanded"
+				{
+					"RunScript"
+					{
+						"ScriptFile"		"scripts/vscripts/heroes/hero_clinkz/clinkz_strafe.lua"
+						"Function"			"clinkz_strafe_om"
+						"Target"
+						{
+							"Center"  		"TARGET"
+							"Radius" 		"%radius"
+							"Teams" 		"DOTA_UNIT_TARGET_TEAM_ENEMY"
+							"Types" 		"DOTA_UNIT_TARGET_HERO | DOTA_UNIT_TARGET_BASIC"
+						}
+					}
+				}
+			}
+		}
+	}
+	//=================================================================================================================
+	// 天怒法师-上古封印
+	//=================================================================================================================
+	"skywrath_mage_ancient_seal_om"
+	{
+		// General
+		//-------------------------------------------------------------------------------------------------------------
+		"BaseClass"						"ability_datadriven"
+		"AbilityBehavior"				"DOTA_ABILITY_BEHAVIOR_UNIT_TARGET | DOTA_ABILITY_BEHAVIOR_AOE"
+		"AbilityUnitTargetTeam"			"DOTA_UNIT_TARGET_TEAM_ENEMY"
+		"AbilityUnitTargetType"			"DOTA_UNIT_TARGET_HERO | DOTA_UNIT_TARGET_BASIC"
+		"SpellImmunityType"				"SPELL_IMMUNITY_ENEMIES_NO"
+		"AbilityTextureName"			"skywrath_mage_ancient_seal"
+		"AOERadius"						"%radius"
+	
+	
+		// Casting
+		//-------------------------------------------------------------------------------------------------------------
+		"AbilityCastRange"				"700"
+		"AbilityCastPoint"				"0.1 0.1 0.1 0.1"
+		
+		// Time		
+		//-------------------------------------------------------------------------------------------------------------
+		"AbilityCooldown"				"14"
+	
+		// Cost
+		//-------------------------------------------------------------------------------------------------------------
+		"AbilityManaCost"				"80 90 100 110"
+	
+		// Special
+		//-------------------------------------------------------------------------------------------------------------
+		"AbilitySpecial"
+		{
+			"01"	//减魔抗
+			{
+				"var_type"				"FIELD_INTEGER"
+				"resist_debuff"			"-30 -35 -40 -45"
+			}
+			"02"	//持续时间
+			{
+				"var_type"				"FIELD_FLOAT"
+				"seal_duration"			"3.0 4.0 5.0 6.0"
+			}
+			"03"	//AOE范围
+			{
+				"var_type"				"FIELD_INTEGER"
+				"radius"				"300"
+			}
+			"04"	//AOE伤害
+			{
+				"var_type"				"FIELD_INTEGER"
+				"aoe_damage"			"75 150 225 300"
+			}
+		}
+		
+		// Data driven
+		//-------------------------------------------------------------------------------------------------------------
+		"precache"
+		{
+			"soundfile"			"soundevents/game_sounds_heroes/game_sounds_skywrath_mage.vsndevts"
+			"particle"			"particles/units/heroes/hero_skywrath_mage/skywrath_mage_ancient_seal_debuff.vpcf"
+			"particle"			"particles/generic_gameplay/generic_silence.vpcf"
+		}
+		
+		"OnSpellStart"
+		{
+			"FireSound"
+			{
+				"Target"		"TARGET"
+				"EffectName"	"Hero_SkywrathMage.AncientSeal.Target"
+			}
+		
+			"ApplyModifier"
+			{
+				"Target"
+				{
+					"Center"	"TARGET"
+					"Types"		"DOTA_UNIT_TARGET_HERO | DOTA_UNIT_TARGET_BASIC"
+				}
+				"ModifierName"	"modifier_ancient_seal_debuff_datadriven"
+			}
+			
+		}
+		
+		"Modifiers"
+		{
+			"modifier_ancient_seal_debuff_datadriven"
+			{
+				"Duration"				"%seal_duration"
+				
+				"OnCreated"
+				{
+					"AttachEffect"
+					{
+						"Target"				"TARGET"
+						"EffectName"			"particles/units/heroes/hero_skywrath_mage/skywrath_mage_ancient_seal_debuff_rune.vpcf"
+						"EffectAttachType"		"start_at_customorigin"
+						"ControlPointEntities"
+						{
+							"TARGET"			"attach_origin"
+						}
+					}
+
+					"AttachEffect"
+					{
+						"Target"				"TARGET"
+						"EffectName"			"particles/generic_gameplay/generic_silence.vpcf"
+						"EffectAttachType"		"follow_overhead"
+					}
+
+					"Properties"
+					{
+						"MODIFIER_PROPERTY_MAGICAL_RESISTANCE_BONUS"	"%resist_debuff"
+					}
+				}
+
+				"ThinkInterval"			"%seal_duration-0.1"
+				"OnIntervalThink"
+				{
+					"Damage"        
+					{
+						"Target"                
+						{
+							"Center"	"TARGET"
+							"Radius" 	"%radius"
+							"Teams" 	"DOTA_UNIT_TARGET_TEAM_ENEMY"
+							"Types" 	"DOTA_UNIT_TARGET_HERO | DOTA_UNIT_TARGET_BASIC"
+						}
+						"Type"			"DAMAGE_TYPE_MAGICAL"
+						"Damage"        "%aoe_damage"
+					}
+					"AttachEffect"
+					{
+						"Target"				"TARGET"
+						"EffectName"			"particles/econ/items/brewmaster/brewmaster_offhand_elixir/brewmaster_thunder_clap_splash_elixir.vpcf"
+						"EffectAttachType"		"follow_origin"
+					}
+					
+				}
+				
+				"States"
+				{
+					"MODIFIER_STATE_SILENCED"						"MODIFIER_STATE_VALUE_ENABLED"
+				}
+			}
+		}
+	}
+	//=================================================================================================================
+	// 幻影长矛手-灵魂之矛
+	//=================================================================================================================
+	"phantom_lancer_spirit_lance_om"
+	{
+		// General
+		//-------------------------------------------------------------------------------------------------------------
+		"BaseClass"						"ability_datadriven"
+		"AbilityBehavior"				"DOTA_ABILITY_BEHAVIOR_UNIT_TARGET | DOTA_ABILITY_BEHAVIOR_AOE"
+		"AbilityUnitTargetTeam"			"DOTA_UNIT_TARGET_TEAM_ENEMY"
+		"AbilityUnitTargetType"			"DOTA_UNIT_TARGET_HERO | DOTA_UNIT_TARGET_BASIC"
+		"AbilityUnitDamageType"			"DAMAGE_TYPE_MAGICAL"	
+		"SpellImmunityType"				"SPELL_IMMUNITY_ENEMIES_NO"
+		"FightRecapLevel"				"1"
+		"AbilityTextureName"			"phantom_lancer_spirit_lance"
+	
+		// Casting
+		//-------------------------------------------------------------------------------------------------------------
+		"AoERadius"                 	"%radius"
+		"AbilityCastRange"				"750"
+		"AbilityCastPoint"				"0.3 0.3 0.3 0.3"
+	
+		// Time		
+		//-------------------------------------------------------------------------------------------------------------
+		"AbilityCooldown"				"7"
+	
+		// Cost
+		//-------------------------------------------------------------------------------------------------------------
+		"AbilityManaCost"				"125 130 135 140"
+
+		"precache"
+		{
+			"soundfile"			"soundevents/game_sounds_heroes/game_sounds_phantom_assassin.vsndevts"
+			"particle"			"particles/units/heroes/hero_phantom_assassin/phantom_assassin_stifling_dagger.vpcf"
+			"particle"			"particles/units/heroes/hero_phantom_assassin/phantom_assassin_stifling_dagger_debuff.vpcf"
+		}
+		"OnAbilityPhaseStart"
+		{
+			"RunScript"
+			{
+				"ScriptFile"	"scripts/vscripts/heroes/hero_phantom_lancer/phantom_lancer_spirit_lance.lua"
+				"Function"		"phantom_lancer_spirit_lance_om_imitate"
+			}
+
+		}
+		"OnSpellStart"
+		{
+			"TrackingProjectile"
+			{
+				"Target"		"TARGET"
+			     "EffectName"			"particles/units/heroes/hero_phantom_lancer/phantomlancer_spiritlance_projectile.vpcf"
+			     "Dodgeable"			"1"   //是否可以闪避
+			     "ProvidesVision"		"1"   //投射物是否提供视野，只有0和1
+			     "VisionRadius"			"300"        //投射物提供多大的视野范围
+			     "MoveSpeed"			"%lance_speed"     //投射速率，如果是魔兽WE过来的就很清楚了
+			     "SourceAttachment"		"DOTA_PROJECTILE_ATTACHMENT_ATTACK_2"   //从那个地方发射出去，我是这么理解的
+			}
+
+			"FireSound"
+			{
+		        "EffectName"   "Hero_PhantomLancer.SpiritLance.Throw"
+		        "Target"       "CASTER"
+			}
+
+			"ApplyModifier"
+	        {
+	                "ModifierName"        "modifier_phantom_lancer_spirit_lance_om_main_target"
+	                "Target"              "TARGET"
+	        }
+		}
+
+		"OnProjectileHitUnit"
+		{
+		   "ApplyModifier"
+	        {
+	                "ModifierName"        "modifier_phantom_lancer_spirit_lance_om_slow"
+	                "Target"              "TARGET"
+	        }
+
+			"FireSound"
+			{
+		        "EffectName"		"Hero_PhantomLancer.SpiritLance.Impact"
+		        "Target"			"TARGET"
+			}
+
+			"RunScript"
+			{
+				"ScriptFile"		"scripts/vscripts/heroes/hero_phantom_lancer/phantom_lancer_spirit_lance.lua"
+				"Function"			"phantom_lancer_spirit_lance_om"
+				"Target"
+				{
+					"Center"  		"TARGET"
+					"Radius" 		"%radius"
+					"Teams" 		"DOTA_UNIT_TARGET_TEAM_ENEMY"
+					"Types" 		"DOTA_UNIT_TARGET_HERO | DOTA_UNIT_TARGET_BASIC"
+				}
+			}
+
+		}
+		"Modifiers"
+		{
+			"modifier_phantom_lancer_spirit_lance_om_slow"
+			{
+				"IsDebuff"		"1"
+				"Duration"		"%slow_duration"
+
+				"EffectName"	"particles/units/heroes/hero_phantom_lancer/phantomlancer_spiritlance_target.vpcf"
+				
+				"EffectAttachType"	"follow_origin"
+
+				"Properties"
+				{
+					"MODIFIER_PROPERTY_MOVESPEED_BONUS_PERCENTAGE"		"%movement_speed_pct"
+				}
+			}
+			"modifier_phantom_lancer_spirit_lance_om_illusion"
+			{
+				"IsHidden"		"1"
+				"StatusEffectName"     "particles/status_fx/status_effect_phantom_lancer_illusion.vpcf"
+				"StatusEffectPriority" "65535"
+			}
+			"modifier_phantom_lancer_spirit_lance_om_main_target"
+			{
+				"IsHidden"		"1"
+				"Duration"		"7"
+			}
+		}
+		
+		
+		// Special
+		//-------------------------------------------------------------------------------------------------------------
+		"AbilitySpecial"
+		{
+			"01"//投射速度
+			{
+				"var_type"					"FIELD_INTEGER"
+				"lance_speed"				"1000 1000 1000 1000"
+			}
+			"02"//减速时间
+			{
+				"var_type"					"FIELD_FLOAT"
+				"slow_duration"					"3.25"
+			}
+			"03"//减速效果
+			{
+				"var_type"					"FIELD_INTEGER"
+				"movement_speed_pct"		"-10 -20 -30 -40"
+			}
+			"04"//幻象持续
+			{
+				"var_type"					"FIELD_FLOAT"
+				"illusion_duration"			"2.0 4.0 6.0 8.0"
+			}
+			"05"//幻象伤害降低
+			{
+				"var_type"					"FIELD_INTEGER"
+				"illusion_damage_out_pct"	"-80 -80 -80 -80"
+			}
+			"06"//幻象造成伤害百分比
+			{
+				"var_type"					"FIELD_INTEGER"
+				"tooltip_illusion_damage"	"20 20 20 20"
+			}
+			"07"//幻象易伤
+			{
+				"var_type"					"FIELD_INTEGER"
+				"illusion_damage_in_pct"	"300 300 300 300"
+			}
+			"08"//幻象承受伤害百分比
+			{
+				"var_type"					"FIELD_INTEGER"
+				"tooltip_illusion_total_damage_in_pct"	"400 400 400 400"
+			}			
+			"09"//丢失目标距离
+			{
+				"var_type"					"FIELD_INTEGER"
+				"fake_lance_distance"		"675"
+			}
+			"10"//扩散范围
+			{
+				"var_type"					"FIELD_INTEGER"
+				"radius"					"300"
+			}
+			"11"//伤害
+			{
+				"var_type"					"FIELD_INTEGER"
+				"damage"					"100 150 200 250"
+			}
+								
+		}	
+	}
+	"bane_nightmare_om"
+	{
+		// General
+		//-------------------------------------------------------------------------------------------------------------
+		"BaseClass"						"ability_datadriven"
+		"AbilityBehavior"				"DOTA_ABILITY_BEHAVIOR_UNIT_TARGET | DOTA_ABILITY_BEHAVIOR_DONT_RESUME_ATTACK | DOTA_ABILITY_BEHAVIOR_AOE"
+		"AbilityUnitTargetTeam"			"DOTA_UNIT_TARGET_TEAM_BOTH"
+		"AbilityUnitTargetType"			"DOTA_UNIT_TARGET_HERO | DOTA_UNIT_TARGET_CREEP"
+		"AbilityUnitTargetFlags"		"DOTA_UNIT_TARGET_FLAG_NOT_MAGIC_IMMUNE_ALLIES"
+		"SpellImmunityType"				"SPELL_IMMUNITY_ALLIES_NO"
+		"AbilityUnitDamageType"			"DAMAGE_TYPE_PURE"
+		"AbilityTextureName"			"bane_nightmare"
+	
+		// Precache
+		//-------------------------------------------------------------------------------------------------------------
+		"precache"
+		{
+			"soundfile"		"soundevents/game_sounds_heroes/game_sounds_bane.vsndevts"		
+			"particle"		"particles/units/heroes/hero_bane/bane_nightmare.vpcf"		
+		}	
+	
+		// Casting
+		//-------------------------------------------------------------------------------------------------------------
+		"AbilityCastRange"				"500 550 600 650"
+		"AbilityCastPoint"				"0.5 0.5 0.5 0.5"
+		"AoERadius"                 	"%radius"
+	
+		// Time		
+		//-------------------------------------------------------------------------------------------------------------
+		"AbilityCooldown"				"15.0 15.0 15.0 15.0"
+		"AbilityDuration"				"4.0 5.0 6.0 7.0"
+	
+		// Damage.
+		//-------------------------------------------------------------------------------------------------------------
+		"AbilityDamage"					"%damage"
+	
+		// Cost
+		//-------------------------------------------------------------------------------------------------------------
+		"AbilityManaCost"				"165 165 165 165"	
+		
+		// Stats
+		//-------------------------------------------------------------------------------------------------------------
+		"AbilityModifierSupportValue"	"0.5"	// Applies two modifiers
+	
+		// Special
+		//-------------------------------------------------------------------------------------------------------------
+		"AbilitySpecial"
+		{
+			"01"//伤害间隔
+			{
+				"var_type"					"FIELD_FLOAT"
+				"nightmare_dot_interval"	"1.0"
+			}
+			"02"//无敌时间
+			{
+				"var_type"					"FIELD_FLOAT"
+				"nightmare_invuln_time"		"1.0"
+			}
+			"03"//持续时间
+			{
+				"var_type"					"FIELD_FLOAT"
+				"duration"					"4.0 5.0 6.0 7.0"
+			}
+			"04"//
+			{
+				"var_type"					"FIELD_FLOAT"
+				"animation_rate"			"0.2"
+			}
+			"05"//施法距离
+			{
+				"var_type"					"FIELD_INTEGER"
+				"cast_range_tooltip"		"500 550 600 650"
+			}
+			"06" //extra variable
+			{
+				"var_type"					"FIELD_INTEGER"
+				"aura_radius"				"1000"
+			}
+			"07"//AOE范围
+			{
+				"var_type"					"FIELD_INTEGER"
+				"radius"                	"300"
+			}
+			"07"//伤害
+			{
+				"var_type"					"FIELD_INTEGER"
+				"damage"                	"20 30 40 50"
+			}
+		}
+	
+		"OnSpellStart"
+		{
+			"FireSound"
+			{
+				"EffectName"	"Hero_Bane.Nightmare"
+				"Target"		"TARGET"
+			}
+	
+			"ApplyModifier"
+			{
+				"ModifierName"	"modifier_bane_nightmare_om"
+				"Target"		"TARGET"
+			}
+		}
+	
+		"Modifiers"
+		{
+			"modifier_bane_nightmare_om"
+			{
+				"Duration"	"%duration"
+				"IsDebuff"	"1"
+	
+				"EffectName"    		"particles/units/heroes/hero_bane/bane_nightmare.vpcf"
+	            "EffectAttachType"      "follow_overhead"
+	
+	            "OverrideAnimation"     "ACT_DOTA_FLAIL"
+	            //"OverrideAnimationRate"	"%animation_rate"
+	            "DAMAGE"				"%damage"
+
+	
+	            "OnTakeDamage"//受到伤害时移除
+	            {
+	            	"RemoveModifier"
+	            	{
+	            		"ModifierName"	"modifier_bane_nightmare_om"
+	            		"Target" 		"UNIT"
+	            	}
+	            }
+	
+	            "OnCreated"
+	            {
+	            	"FireSound"
+	            	{
+	            		"EffectName"	"Hero_Bane.Nightmare.Loop"
+	            		"Target" 		"TARGET"
+	            	}
+	
+	            	"ApplyModifier"
+	            	{
+	            		"ModifierName"	"modifier_bane_nightmare_damage_om"
+	            		"Target" 		"TARGET"
+	            		"Duration"		"%duration"
+	            	}
+	
+	            	"ApplyModifier"
+	            	{
+	            		"ModifierName"	"modifier_bane_nightmare_om_invul"
+	            		"Target" 		"TARGET"
+	            		"Duration"		"%nightmare_invuln_time"
+	            	}
+	
+	            	"RunScript"
+	            	{
+	            		"ScriptFile"		"scripts/vscripts/heroes/hero_bane/nightmare.lua"
+	            		"Function"			"NightmareCasterCheck"
+	            		"main_ability_name"	"bane_nightmare_om"
+	            		"sub_ability_name"	"bane_nightmare_end_om"
+	            		"check_ability"		"bane_nightmare_om"
+	            	}
+	            }
+	
+	            "OnDestroy"
+	            {
+	            	"FireSound"
+	               	{
+	              		"EffectName"	"Hero_Bane.Nightmare.End"
+	               		"Target"
+	               		{
+	               			"Center"	"TARGET"
+	               			"Flags"		"DOTA_UNIT_TARGET_FLAG_INVULNERABLE"
+	               		}
+	               	}
+	
+	               	"RemoveModifier"
+	            	{
+	            		"ModifierName"	"modifier_bane_nightmare_damage_om"
+	            		"Target"
+	               		{
+	               			"Center"	"TARGET"
+	               			"Flags"		"DOTA_UNIT_TARGET_FLAG_INVULNERABLE"
+	               		}
+	            	}
+	
+	               	"RunScript"
+	            	{
+	            		"ScriptFile"	"scripts/vscripts/heroes/hero_bane/nightmare.lua"
+	            		"Function"		"NightmareStopSound"
+	            		"sound"			"Hero_Bane.Nightmare.Loop"
+	            	}            	
+	
+	            	"RunScript"
+	            	{
+	            		"ScriptFile"		"scripts/vscripts/heroes/hero_bane/nightmare.lua"
+	            		"Function"			"NightmareCasterCheck"
+	            		"sub_ability_name"	"bane_nightmare_om"
+	            		"main_ability_name"	"bane_nightmare_end_om"
+	            		"check_ability"		"bane_nightmare_om"
+	            	}
+	            }         
+	
+	            "ThinkInterval"  "0.1"
+	            "OnIntervalThink"
+	            {
+	            	"RunScript"
+	            	{
+	            		"ScriptFile"	"scripts/vscripts/heroes/hero_bane/nightmare.lua"
+	            		"Function"		"NightmareAura"
+	            		"modifier"		"modifier_bane_nightmare_debuff_om"
+	            	}
+	            }			 
+	
+	            "States"
+	            {
+		           	"MODIFIER_STATE_NIGHTMARED"     		"MODIFIER_STATE_VALUE_ENABLED"
+		            "MODIFIER_STATE_STUNNED"        		"MODIFIER_STATE_VALUE_ENABLED"
+		            "MODIFIER_STATE_SPECIALLY_DENIABLE"		"MODIFIER_STATE_VALUE_ENABLED"
+		            "MODIFIER_STATE_LOW_ATTACK_PRIORITY"	"MODIFIER_STATE_VALUE_ENABLED"		
+	            }
+			}
+	
+			"modifier_bane_nightmare_damage_om"
+			{
+				"IsHidden"		"1"
+	
+				"ThinkInterval" "%nightmare_dot_interval"
+	            "OnIntervalThink"
+	            {
+	            	"RunScript"
+	            	{
+	            		"ScriptFile"	"scripts/vscripts/heroes/hero_bane/nightmare.lua"
+	            		"Function"		"NightmareDamage"
+	            		"Target"
+						{
+							"Center"  		"TARGET"
+							"Radius" 		"%radius"
+							"Teams" 		"DOTA_UNIT_TARGET_TEAM_ENEMY"
+							"Types" 		"DOTA_UNIT_TARGET_HERO | DOTA_UNIT_TARGET_BASIC"
+						}
+	            	}
+	            }
+			}
+	
+			"modifier_bane_nightmare_debuff_om"
+			{
+				"IsHidden"	"1"
+				"IsDebuff"	"1"
+	
+				"OnAttackStart"
+				{
+					"RunScript"
+					{
+						"ScriptFile"			"scripts/vscripts/heroes/hero_bane/nightmare.lua"
+						"Function"				"NightmareBreak"
+						"nightmare_modifier"	"modifier_bane_nightmare_om"
+					}
+				}
+			}
+	
+			"modifier_bane_nightmare_om_invul"
+			{
+				"IsDebuff"	"1"
+	
+				"States"
+				{
+					"MODIFIER_STATE_INVULNERABLE"	"MODIFIER_STATE_VALUE_ENABLED"
+					"MODIFIER_STATE_NO_HEALTH_BAR"	"MODIFIER_STATE_VALUE_ENABLED"
+				}
+			}
+		}
+	}
+	"bane_nightmare_end_om"
+	{
+		// General
+		//-------------------------------------------------------------------------------------------------------------
+		"BaseClass"						"ability_datadriven"
+		"AbilityBehavior"				"DOTA_ABILITY_BEHAVIOR_HIDDEN | DOTA_ABILITY_BEHAVIOR_NO_TARGET | DOTA_ABILITY_BEHAVIOR_TOGGLE | DOTA_ABILITY_BEHAVIOR_IGNORE_PSEUDO_QUEUE"
+		"MaxLevel"						"1"
+		"AbilityTextureName"			"bane_nightmare_end"
+	
+		"OnToggleOn"
+		{
+			"RemoveModifier"
+	        {
+	        	"ModifierName"	"modifier_bane_nightmare_om"
+	        	"Target"
+	        	{
+	        		"Center"	"CASTER"
+	        		"Flags"		"DOTA_UNIT_TARGET_FLAG_INVULNERABLE"
+	        	}
+	        }
+	
+	        "RemoveModifier"
+	        {
+	        	"ModifierName"	"modifier_bane_nightmare_om_invul"
+	        	"Target"
+	        	{
+	        		"Center"	"CASTER"
+	        		"Flags"		"DOTA_UNIT_TARGET_FLAG_INVULNERABLE"
+	        	}
+	        }
+	
+			"RunScript"
+	        {
+	        	"ScriptFile"		"scripts/vscripts/heroes/hero_bane/nightmare.lua"
+	            "Function"			"NightmareCasterEnd"
+	        }
+		}
+	}
+
+	//=================================================================================================================
+	// 噬魂鬼-撕裂伤口
+	//=================================================================================================================
+	"life_stealer_open_wounds_om"
+	{
+		// General
+		//-------------------------------------------------------------------------------------------------------------
+		"BaseClass"						"ability_datadriven"
+		"AbilityBehavior"				"DOTA_ABILITY_BEHAVIOR_UNIT_TARGET | DOTA_ABILITY_BEHAVIOR_AOE"
+		"AbilityUnitTargetTeam"			"DOTA_UNIT_TARGET_TEAM_ENEMY"
+		"AbilityUnitTargetType"			"DOTA_UNIT_TARGET_HERO | DOTA_UNIT_TARGET_BASIC"
+		"SpellImmunityType"				"SPELL_IMMUNITY_ENEMIES_NO"
+		"FightRecapLevel"				"1"
+		"AbilityTextureName"			"life_stealer_open_wounds"
+	
+	    "precache"
+	    {
+	        "soundfile"         "soundevents/game_sounds_heroes/game_sounds_life_stealer.vsndevts"
+	        "particle"          "particles/units/heroes/hero_life_stealer/life_stealer_open_wounds.vpcf"
+	        "particle"          "particles/units/heroes/hero_life_stealer/life_stealer_infest_emerge_bloody.vpcf"
+	    }
+		// Casting
+		//-------------------------------------------------------------------------------------------------------------
+		"AbilityCastPoint"				"0.2"
+		"AbilityCastRange"				"200 300 400 500"
+		"AoERadius"                 	"%radius"
+		
+		// Time		
+		//-------------------------------------------------------------------------------------------------------------
+		"AbilityCooldown"				"24 20 16 12"
+		
+		//-------------------------------------------------------------------------------------------------------------
+		"AbilityDuration"				"8 8 8 8"
+		
+		// Cost
+		//-------------------------------------------------------------------------------------------------------------
+		"AbilityManaCost"				"110 110 110 110"
+			
 		// Special
 		//-------------------------------------------------------------------------------------------------------------
 		"AbilitySpecial"
 		{
 			"01"
 			{
-				"var_type"					"FIELD_INTEGER"
-				"damage_absorb"				"200 300 400 500"
+				"var_type"				"FIELD_INTEGER"
+				"slow_steps"			"-70 -70 -60 -50 -30 -10 -10 -10"
 			}
 			"02"
 			{
-				"var_type"					"FIELD_INTEGER"
-				"bonus_damage"				"20 40 60 80"
+				"var_type"				"FIELD_INTEGER"
+				"heal_percent"			"50"
+			}
+			"03"
+			{
+				"var_type"				"FIELD_INTEGER"
+				"slow_tooltip"			"70"
 			}
 			"04"
 			{
-				"var_type"					"FIELD_FLOAT"
-				"duration"					"17.0 17.0 17.0 17.0"
+				"var_type"				"FIELD_INTEGER"
+				"duration"				"8"
+			}
+			"05"
+			{
+				"var_type"				"FIELD_INTEGER"
+				"tooltip_range"			"200 300 400 500"
+			}
+			// Extra
+			"06"
+			{
+				"var_type"				"FIELD_INTEGER"
+				"slow_step70"			"-70"
+			}
+			"07"
+			{
+				"var_type"				"FIELD_INTEGER"
+				"slow_step60"			"-60"
+			}
+			"08"
+			{
+				"var_type"				"FIELD_INTEGER"
+				"slow_step50"			"-50"
+			}
+			"09"
+			{
+				"var_type"				"FIELD_INTEGER"
+				"slow_step30"			"-30"
+			}
+			"10"
+			{
+				"var_type"				"FIELD_INTEGER"
+				"slow_step10"			"-10"
+			}
+			"11"
+			{
+				"var_type"				"FIELD_INTEGER"
+				"hero_damage_rates"		"25"
+			}
+			"12"
+			{
+				"var_type"				"FIELD_INTEGER"
+				"creep_damage_rates"	"50"
+			}
+			"13"
+			{
+				"var_type"				"FIELD_INTEGER"
+				"radius"				"300"
+			}
+		}
+	
+		"OnSpellStart"
+		{
+			"FireSound"
+			{
+				"EffectName"	"Hero_LifeStealer.OpenWounds.Cast"
+				"Target" 		"TARGET"
+			}
+	
+			"ApplyModifier"
+			{
+				"ModifierName"	"modifier_open_wounds"
+				"Target" 		"TARGET"
+				"Duration"		"%duration"
+			}
+		}
+	
+		"Modifiers"
+		{
+			"modifier_open_wounds"
+			{
+				"Passive"			"0"
+				"IsHidden"			"0"
+				"IsDebuff"			"1"
+	
+				"OnTakeDamage"
+				{
+					"Heal"
+					{
+						"Target"        "ATTACKER"
+						"HealAmount"	"%attack_damage * %heal_percent / 100"
+					}
+				}
+	
+				"OnCreated"
+				{
+					"FireSound"
+					{
+						"EffectName"	"Hero_LifeStealer.OpenWounds"
+						"Target" 		"TARGET"
+					}
+	
+					"AttachEffect"
+					{
+						"EffectName"        "particles/units/heroes/hero_life_stealer/life_stealer_open_wounds.vpcf"
+						"EffectAttachType"  "attach_hitloc"
+						"Target"            "TARGET"
+					}
+	
+					"ApplyModifier"
+					{
+						"ModifierName"	"modifier_open_wounds_70"
+						"Target" 		"TARGET"
+						"Duration"		"2"
+					}
+					"RunScript"
+					{
+						"ScriptFile"		"scripts/vscripts/heroes/hero_life_stealer/life_stealer_open_wounds_om.lua"
+						"Function"			"open_wounds_start_om"
+					}
+				}
+				"OnDeath"
+				{
+					//"FireEffect"
+					//{
+					//	"EffectName"        "particles/units/heroes/hero_life_stealer/life_stealer_infest_emerge_bloody.vpcf"
+					//	"EffectAttachType"  "attach_hitloc"
+					//	"Target"            "TARGET"
+					//}
+					//"FireSound"
+					//{
+					//	"EffectName"		"Hero_LifeStealer.consume"
+					//	"Target" 			"TARGET"
+					//}
+					"RunScript"
+					{
+						"ScriptFile"		"scripts/vscripts/heroes/hero_life_stealer/life_stealer_open_wounds_om.lua"
+						"Function"			"open_wounds_death_om"
+					}
+				}
+			}
+	
+			"modifier_open_wounds_70"
+			{
+				"IsHidden"	"1"
+	
+				"OnDestroy"
+				{
+					"ApplyModifier"
+					{
+						"ModifierName"	"modifier_open_wounds_60"
+						"Target" 		"TARGET"
+						"Duration"		"1"
+					}
+				}
+	
+				"Properties"
+				{
+				    "MODIFIER_PROPERTY_MOVESPEED_BONUS_PERCENTAGE" "%slow_step70"
+				}
+			}
+	
+			"modifier_open_wounds_60"
+			{
+				"IsHidden"	"1"
+	
+				"OnDestroy"
+				{
+					"ApplyModifier"
+					{
+						"ModifierName"	"modifier_open_wounds_50"
+						"Target" 		"TARGET"
+						"Duration"		"1"
+					}
+				}
+	
+				"Properties"
+				{
+				    "MODIFIER_PROPERTY_MOVESPEED_BONUS_PERCENTAGE" "%slow_step60"
+				}
+			}
+	
+			"modifier_open_wounds_50"
+			{
+				"IsHidden"	"1"
+	
+				"OnDestroy"
+				{
+					"ApplyModifier"
+					{
+						"ModifierName"	"modifier_open_wounds_30"
+						"Target" 		"TARGET"
+						"Duration"		"1"
+					}
+				}
+	
+				"Properties"
+				{
+				    "MODIFIER_PROPERTY_MOVESPEED_BONUS_PERCENTAGE" "%slow_step50"
+				}
+			}
+	
+			"modifier_open_wounds_30"
+			{
+				"IsHidden"	"1"
+	
+				"OnDestroy"
+				{
+					"ApplyModifier"
+					{
+						"ModifierName"	"modifier_open_wounds_10"
+						"Target" 		"TARGET"
+						"Duration"		"3"
+					}
+				}
+	
+				"Properties"
+				{
+				    "MODIFIER_PROPERTY_MOVESPEED_BONUS_PERCENTAGE" "%slow_step30"
+				}
+			}
+	
+			"modifier_open_wounds_10"
+			{
+				"IsHidden"	"1"
+	
+				"Properties"
+				{
+				    "MODIFIER_PROPERTY_MOVESPEED_BONUS_PERCENTAGE" "%slow_step10"
+				}
+			}
+		}
+	}
+	//=================================================================================================================
+	// 冥魂大帝-冥火爆击
+	//=================================================================================================================
+	"wraith_king_warithfire_blast_om"
+	{
+		// General
+		//-------------------------------------------------------------------------------------------------------------
+		"BaseClass"						"ability_datadriven"
+		"AbilityBehavior"				"DOTA_ABILITY_BEHAVIOR_UNIT_TARGET | DOTA_ABILITY_BEHAVIOR_AOE"
+		"AbilityUnitTargetTeam"			"DOTA_UNIT_TARGET_TEAM_ENEMY"
+		"AbilityUnitTargetType"			"DOTA_UNIT_TARGET_HERO | DOTA_UNIT_TARGET_BASIC"
+		"AbilityUnitDamageType"			"DAMAGE_TYPE_MAGICAL"	
+		"SpellImmunityType"				"SPELL_IMMUNITY_ENEMIES_NO"
+		"FightRecapLevel"				"1"
+		"AbilityTextureName"			"skeleton_king_hellfire_blast"
+		
+		// Casting
+		//-------------------------------------------------------------------------------------------------------------
+		"AbilityCastRange"				"525"
+		"AbilityCastPoint"				"0.35 0.35 0.35 0.35"
+		"AbilityCastAnimation"			"ACT_DOTA_CAST_ABILITY_1"
+		"AoERadius"                 	"%AOE_radius"
+	
+		// Time		
+		//-------------------------------------------------------------------------------------------------------------
+		"AbilityCooldown"				"8.0 8.0 8.0 8.0"
+	
+		// Cost
+		//-------------------------------------------------------------------------------------------------------------
+		"AbilityManaCost"				"140"
+	
+		// Stats
+		//-------------------------------------------------------------------------------------------------------------
+		"AbilityModifierSupportValue"	"0.5"	// Applies two modifiers
+	
+		// Special
+		//-------------------------------------------------------------------------------------------------------------
+		"AbilitySpecial"
+		{
+			"01"
+			{
+				"var_type"				"FIELD_INTEGER"
+				"blast_speed"			"1000"
+			}
+			
+			"02"
+			{
+				"var_type"				"FIELD_FLOAT"
+				"blast_stun_duration"	"2.0"
+			}
+			
+			"03"
+			{
+				"var_type"				"FIELD_INTEGER"
+				"blast_slow"			"-20"
+			}
+			
+			"04"
+			{
+				"var_type"				"FIELD_FLOAT"
+				"blast_dot_duration"	"4"
+			}
+			
+			"05"
+			{
+				"var_type"				"FIELD_INTEGER"
+				"blast_dot_damage"		"20 40 60 80"
+			}
+			
+			"06"
+			{
+				"var_type"				"FIELD_FLOAT"
+				"tooltip_slow_duration"	"2"
+			}
+			"07"
+			{
+
+				"var_type"				"FIELD_INTEGER"
+				"AOE_radius"			"300"
+			}
+		}
+	
+		"precache"
+		{
+			"soundfile"	"soundevents/game_sounds_heroes/game_sounds_skeletonking.vsndevts"
+			"particle"	"particles/units/heroes/hero_skeletonking/skeletonking_hellfireblast.vpcf"
+			"particle"	"particles/units/heroes/hero_skeletonking/skeletonking_hellfireblast_explosion.vpcf"
+			"particle"	"particles/units/heroes/hero_skeletonking/skeletonking_hellfireblast_debuff.vpcf"
+			"particle"	"particles/units/heroes/hero_skeletonking/skeletonking_hellfireblast_warmup.vpcf"
+		}
+	
+		"OnAbilityPhaseStart"
+		{
+			"FireEffect"
+			{
+				"EffectName"        "particles/units/heroes/hero_skeletonking/skeletonking_hellfireblast_warmup.vpcf"
+				"EffectAttachType"  "start_at_customorigin"
+				
+				"ControlPointEntities"
+				{
+					"CASTER"	"attach_attack1"
+				}
+			}
+		}
+	
+		"OnSpellStart"
+		{
+			"TrackingProjectile"
+			{
+			    "Target"           	"TARGET"
+			    "EffectName"       	"particles/units/heroes/hero_skeletonking/skeletonking_hellfireblast.vpcf"
+			    "Dodgeable"        	"1"
+			    "ProvidesVision"   	"0"
+			    "VisionRadius"     	"0"
+			    "MoveSpeed"        	"%blast_speed"
+			    "SourceAttachment"  "DOTA_PROJECTILE_ATTACHMENT_ATTACK_2"
+			}
+	
+			"FireSound"
+			{
+				"EffectName"	"Hero_SkeletonKing.Hellfire_Blast"
+				"Target"		"CASTER"
+			}
+		}
+	
+		"OnProjectileHitUnit"
+		{
+			"DeleteOnHit"			"1"
+	
+			"FireSound"
+			{
+				"EffectName"	"Hero_SkeletonKing.Hellfire_BlastImpact"
+				"Target"		"CASTER"
+			}
+	
+			"ApplyModifier"
+			{
+				"ModifierName"	"modifier_hellfire_blast_stun"
+				"Target"		"TARGET"
+			}
+	
+			"ApplyModifier"
+			{
+				"ModifierName"	"modifier_hellfire_blast_slow"
+				"Target"		"TARGET"
+			}
+
+			"ApplyModifier"
+			{
+				"ModifierName"	"modifier_hellfire_blast_dot"
+				"Target"		"TARGET"
+			}
+			
+	
+			"FireEffect"
+			{
+				"EffectName"		"particles/units/heroes/hero_skeletonking/skeletonking_hellfireblast_explosion.vpcf"
+				"EffectAttachType"	"follow_origin"
+				"Target"			"TARGET"
+	
+				//CP3 needs to be attached to the target hit
+				"ControlPointEntities"
+				{
+					"TARGET"		"attach_hitloc"
+					"TARGET"		"attach_hitloc"
+					"TARGET"		"attach_hitloc"
+					"TARGET"		"attach_hitloc"
+				}
+			}
+		}
+	
+		"Modifiers"
+		{
+			"modifier_hellfire_blast_stun"
+			{
+				"IsDebuff"			"1"
+				"Duration"			"%blast_stun_duration"
+				"States"
+				{
+					"MODIFIER_STATE_STUNNED"	"MODIFIER_STATE_VALUE_ENABLED"
+				}
+	
+				"OverrideAnimation"	"ACT_DOTA_DISABLED"
+				"EffectName"		"particles/generic_gameplay/generic_stunned.vpcf"
+				"EffectAttachType"	"follow_overhead"
+			}
+	
+			"modifier_hellfire_blast_slow"
+			{
+				"IsDebuff"			"1"
+				"Duration"			"%blast_dot_duration"
+	
+				"Properties"
+				{
+					"MODIFIER_PROPERTY_MOVESPEED_BONUS_PERCENTAGE"	"%blast_slow"
+				}
+	
+				"EffectName"		"particles/units/heroes/hero_skeletonking/skeletonking_hellfireblast_debuff.vpcf"
+				"EffectAttachType"	"follow_origin"
+			}
+	
+			"modifier_hellfire_blast_dot"
+			{
+				"IsHidden"	"1"
+				"Duration"	"%blast_dot_duration"
+	
+				"ThinkInterval"		"1"
+				"OnIntervalThink"
+				{
+					"Damage"
+					{
+						"Target"
+						{
+							"Center"  		"TARGET"
+							"Radius" 		"%AOE_radius"
+							"Teams" 		"DOTA_UNIT_TARGET_TEAM_ENEMY"
+							"Types" 		"DOTA_UNIT_TARGET_HERO | DOTA_UNIT_TARGET_BASIC"
+						}
+						"Type"		"DAMAGE_TYPE_MAGICAL"
+						"Damage"	"%blast_dot_damage"
+					}
+				}
+			}
+		}
+	}
+	//=================================================================================================================
+	// 夜魔-虚空
+	// Author: Pizzalol Sniper
+	// Date: 2016.04.03
+	//=================================================================================================================
+	"night_stalker_void_om"
+	{
+		// General
+		//-------------------------------------------------------------------------------------------------------------
+		"BaseClass"						"ability_datadriven"
+		"AbilityBehavior"				"DOTA_ABILITY_BEHAVIOR_UNIT_TARGET | DOTA_ABILITY_BEHAVIOR_AOE"
+		
+		// Unit Targeting
+		//-------------------------------------------------------------------------------------------------------------
+		"AbilityUnitTargetTeam"			"DOTA_UNIT_TARGET_TEAM_ENEMY"
+		"AbilityUnitTargetType"			"DOTA_UNIT_TARGET_HERO | DOTA_UNIT_TARGET_BASIC"
+		"AbilityUnitDamageType"			"DAMAGE_TYPE_MAGICAL"
+		"SpellImmunityType"				"SPELL_IMMUNITY_ENEMIES_NO"
+		"FightRecapLevel"				"1"
+		"AbilityTextureName"			"night_stalker_void"
+		
+		// Stats
+		//-------------------------------------------------------------------------------------------------------------
+		"AbilityCastRange"				"525"
+		"AbilityCastPoint"				"0.3 0.3 0.3 0.3"
+		"AbilityCooldown"				"8 8 8 8"
+		"AbilityManaCost"				"80 90 100 110"
+		"AoERadius"                 	"%radius"
+	
+		// Precache
+		//-------------------------------------------------------------------------------------------------------------
+		"precache"
+		{
+			"soundfile"			"soundevents/game_sounds_heroes/game_sounds_nightstalker.vsndevts"
+			"particle"			"particles/units/heroes/hero_night_stalker/nightstalker_void.vpcf"
+			"particle"			"particles/generic_gameplay/generic_stunned.vpcf"
+		}
+			
+		// Stats
+		//-------------------------------------------------------------------------------------------------------------
+		"AbilityModifierSupportValue"	"0.5"	// applies 2 modifiers
+	
+		// Special
+		//-------------------------------------------------------------------------------------------------------------
+		"AbilitySpecial"
+		{
+			"01"
+			{
+				"var_type"				"FIELD_FLOAT"
+				"duration_day"			"2.0 2.0 2.0 2.0"
+			}
+			"02"
+			{
+				"var_type"				"FIELD_FLOAT"
+				"duration_night"		"2.5 3 3.5 4.0"
+			}
+			"03"
+			{
+				"var_type"				"FIELD_INTEGER"
+				"movespeed_slow"		"-50 -50 -50 -50"
+			}
+			"04"
+			{
+				"var_type"				"FIELD_INTEGER"
+				"attackspeed_slow"		"-50 -50 -50 -50"
+			}
+			// Extra
+			"05"
+			{
+				"var_type"				"FIELD_FLOAT"
+				"mini_stun"				"0.1"
+			}
+			"06"
+			{
+				"var_type"				"FIELD_INTEGER"
+				"damage"				"90 160 255 335"
+			}
+			"07"
+			{
+				"var_type"				"FIELD_INTEGER"
+				"radius"				"300"
+			}
+		}
+	
+		"OnSpellStart"
+		{
+			"FireSound"
+			{
+				"EffectName"	"Hero_Nightstalker.Void"
+				"Target"		"TARGET"
+			}
+	
+			"Stun"
+			{
+				"Target"	"TARGET"
+				"Duration"	"%mini_stun"
+			}
+	
+			"RunScript"
+			{
+				"ScriptFile"	"scripts/vscripts/heroes/hero_night_stalker/void.lua"
+				"Function"		"Void"
+				"modifier"		"modifier_void_datadriven"
+			}
+	
+			"Damage"
+			{
+				"Target"	"TARGET"
+				"Type"		"DAMAGE_TYPE_MAGICAL"
+				"Damage"	"%damage"
+			}
+		}
+	
+		"Modifiers"
+		{
+			"modifier_void_datadriven"
+			{
+				"IsDebuff"	"1"
+	
+				"EffectName"	"particles/units/heroes/hero_night_stalker/nightstalker_void.vpcf"
+				"EffectAttachType"	"follow_origin"
+	
+				"Properties"
+				{
+					"MODIFIER_PROPERTY_MOVESPEED_BONUS_PERCENTAGE"	"%movespeed_slow"
+					"MODIFIER_PROPERTY_ATTACKSPEED_BONUS_CONSTANT"	"%attackspeed_slow"
+				}
+				"OnDeath"
+				{
+					"RunScript"
+					{
+						"ScriptFile"		"scripts/vscripts/heroes/hero_night_stalker/void.lua"
+						"Function"			"void_death_om"
+					}
+				}
 			}
 		}
 	}

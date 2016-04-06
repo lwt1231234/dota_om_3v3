@@ -6,87 +6,380 @@
 	//=================================================================================	
 	// Creature: Gnoll Assassin
 	//=================================================================================
-	"npc_dota_creature_gnoll_assassin"	
+	"npc_dota_creep_radiant_melee"	
 	{
 		// General
 		//----------------------------------------------------------------
-		"Model"						"models/creeps/neutral_creeps/n_creep_gnoll/n_creep_gnoll_frost.vmdl"	// Model.
-		"BaseClass"					"npc_dota_creature"
-		"SoundSet"					"n_creep_Ranged"
-		"GameSoundsFile"			"soundevents/game_sounds_creeps.vsndevts"
-		"Level"						"1"
-		"ModelScale" 				".9"
+		"Model"						"models/creeps/lane_creeps/creep_radiant_melee/radiant_melee.vmdl"	// 模型
+		"BaseClass"					"npc_dota_creep_lane"
+		"SoundSet"					"n_creep_Melee"
+		"Level"						"1"	// 基础等级
+		"ModelScale" 				"1"	// 模型大小
 
-		// Abilities
-		//----------------------------------------------------------------
-		"Ability1"					""			// Ability 1
-		"Ability2"					""			// Ability 2
-		"Ability3"					""			// Ability 3
-		"Ability4"					""			// Ability 4
 
 		// Armor
 		//----------------------------------------------------------------
-		"ArmorPhysical"				"1"			// Physical protection.
+		"ArmorPhysical"				"2"			// 基础护甲
+		"MagicalResistance"			"0"			// 基础魔抗
 
 		// Attack
 		//----------------------------------------------------------------
-		"AttackCapabilities"		"DOTA_UNIT_CAP_RANGED_ATTACK"
-		"AttackDamageMin"			"30"		// Damage range min.
-		"AttackDamageMax"			"36"		// Damage range max.
-		"AttackRate"				"1.6"		// Speed of attack.
-		"AttackAnimationPoint"		"0.4"		// Normalized time in animation cycle to attack.
-		"AttackAcquisitionRange"	"800"		// Range within a target can be acquired.
-		"AttackRange"				"500"		// Range within a target can be attacked.
-		"ProjectileModel"			"particles/neutral_fx/gnoll_base_attack.vpcf" // Particle system model for projectile.
-		"ProjectileSpeed"			"1500"		// Speed of projectile.		     
-
-		// Bounds
-		//----------------------------------------------------------------
-		"RingRadius"				"40"
-		"HealthBarOffset"			"170"
+		"AttackCapabilities"		"DOTA_UNIT_CAP_MELEE_ATTACK"	// 攻击方式
+		"AttackDamageMin"			"19"		// 最小攻击力
+		"AttackDamageMax"			"23"		// 最大攻击力
+		"AttackRate"				"1"			// 基础攻击间隔
+		"AttackAnimationPoint"		"0.4"		// 攻击前摇
+		"AttackRange"               "100"                       // 攻击范围
+		"AttackAcquisitionRange"	"800"		// 警戒范围
 
 		// Bounty
 		//----------------------------------------------------------------
-		"BountyXP"					"24"		// Experience earn.
-		"BountyGoldMin"				"21"		// Gold earned min.
-		"BountyGoldMax"				"29"		// Gold earned max.
+		"BountyXP"					"62"		// Experience earn.
+		"BountyGoldMin"				"38"		// Gold earned min.
+		"BountyGoldMax"				"48"		// Gold earned max.
+
+		// Bounds
+		//----------------------------------------------------------------
+		"BoundsHullName"			"DOTA_HULL_SIZE_REGULAR"
+		"RingRadius"				"40"
+		"HealthBarOffset"			"170"
 
 		// Movement
 		//----------------------------------------------------------------
-		"MovementCapabilities"		"DOTA_UNIT_CAP_MOVE_GROUND"
-		"MovementSpeed"				"270"		// Speed.			
+		"MovementCapabilities"		"DOTA_UNIT_CAP_MOVE_GROUND"	// 移动方式
+		"MovementSpeed"             "325"                       // 移动速度	
 
 		// Status
 		//----------------------------------------------------------------
-		"StatusHealth"				"75"		// Base health.
-		"StatusHealthRegen"			"0.5"		// Health regeneration rate.
-		"StatusMana"				"0"			// Base mana.
-		"StatusManaRegen"			"0.0"		// Mana regeneration rate.		 
+		"StatusHealth"				"550"		// 基础生命
+		"StatusHealthRegen"			"0.0"		// 基础生命回复
+		"StatusMana"				"0"			// 基础魔法
+		"StatusManaRegen"			"0.0"		// 基础魔法回复	 
 		
 		// Vision
 		//----------------------------------------------------------------
-		"VisionDaytimeRange"		"400"		// Range of vision during day light.
-		"VisionNighttimeRange"		"400"		// Range of vision at night time.
+		"VisionDaytimeRange"		"850"		// 白天视野范围
+		"VisionNighttimeRange"		"800"		// 夜晚视野范围
 
 		// Team
 		//----------------------------------------------------------------
-		"TeamName"					"DOTA_TEAM_NEUTRALS"						// Team name.
-		"CombatClassAttack"			"DOTA_COMBAT_CLASS_ATTACK_PIERCE"
-		"CombatClassDefend"			"DOTA_COMBAT_CLASS_DEFEND_BASIC"
+		"CombatClassAttack"			"DOTA_COMBAT_CLASS_ATTACK_BASIC"	// 攻击类型
+		"CombatClassDefend"			"DOTA_COMBAT_CLASS_DEFEND_BASIC"	// 护甲类型
 		"UnitRelationshipClass"		"DOTA_NPC_UNIT_RELATIONSHIP_TYPE_DEFAULT"
+	}
 
-		// Creature Data
+	"npc_dota_creep_radiant_range"	
+	{
+		// General
 		//----------------------------------------------------------------
-		"Creature"
-		{
-			//Level Up
-			"HPGain"					"50"
-			"DamageGain"				"2"
-			"ArmorGain"					"0.25"
-			"MagicResistGain"			"0.1"
-			"MoveSpeedGain"				"1"
-			"BountyGain"				"3"
-			"XPGain"					"15"
-		}
+		"Model"						"models/creeps/lane_creeps/creep_radiant_ranged/radiant_ranged.vmdl"	// 模型
+		"BaseClass"					"npc_dota_creep_lane"
+		"SoundSet"					"n_creep_Ranged"
+		"Level"						"1"	// 基础等级
+		"ModelScale" 				"0.9"	// 模型大小
+
+
+		// Armor
+		//----------------------------------------------------------------
+		"ArmorPhysical"				"0"			// 基础护甲
+		"MagicalResistance"			"0"			// 基础魔抗
+
+		// Attack
+		//----------------------------------------------------------------
+		"AttackCapabilities"		"DOTA_UNIT_CAP_RANGED_ATTACK"	// 攻击方式
+		"AttackDamageMin"			"21"		// 最小攻击力
+		"AttackDamageMax"			"26"		// 最大攻击力
+		"AttackRate"				"1"			// 基础攻击间隔
+		"AttackAnimationPoint"		"0.4"		// 攻击前摇
+		"AttackRange"               "500"       // 攻击范围
+		"ProjectileModel"			"particles/base_attacks/ranged_goodguy.vpcf"
+		"AttackAcquisitionRange"	"800"		// 警戒范围
+
+		// Bounty
+		//----------------------------------------------------------------
+		"BountyXP"					"41"		// Experience earn.
+		"BountyGoldMin"				"43"		// Gold earned min.
+		"BountyGoldMax"				"53"		// Gold earned max.
+
+		// Bounds
+		//----------------------------------------------------------------
+		"BoundsHullName"			"DOTA_HULL_SIZE_REGULAR"
+		"RingRadius"				"40"
+		"HealthBarOffset"			"170"
+
+		// Movement
+		//----------------------------------------------------------------
+		"MovementCapabilities"		"DOTA_UNIT_CAP_MOVE_GROUND"	// 移动方式
+		"MovementSpeed"             "320"                       // 移动速度	
+
+		// Status
+		//----------------------------------------------------------------
+		"StatusHealth"				"300"		// 基础生命
+		"StatusHealthRegen"			"0.0"		// 基础生命回复
+		"StatusMana"				"500"			// 基础魔法
+		"StatusManaRegen"			"0.0"		// 基础魔法回复	 
+		
+		// Vision
+		//----------------------------------------------------------------
+		"VisionDaytimeRange"		"850"		// 白天视野范围
+		"VisionNighttimeRange"		"800"		// 夜晚视野范围
+
+		// Team
+		//----------------------------------------------------------------
+		"CombatClassAttack"			"DOTA_COMBAT_CLASS_ATTACK_PIERCE"	// 攻击类型
+		"CombatClassDefend"			"DOTA_COMBAT_CLASS_DEFEND_BASIC"	// 护甲类型
+		"UnitRelationshipClass"		"DOTA_NPC_UNIT_RELATIONSHIP_TYPE_DEFAULT"
+	}
+
+	"npc_dota_creep_radiant_siege"	
+	{
+		// General
+		//----------------------------------------------------------------
+		"Model"						"models/creeps/lane_creeps/creep_good_siege/creep_good_siege.vmdl"	// 模型
+		"BaseClass"					"npc_dota_creep_lane"
+		//"SoundSet"				""
+		"Level"						"1"	// 基础等级
+		"ModelScale" 				"0.7"	// 模型大小
+
+
+		// Armor
+		//----------------------------------------------------------------
+		"ArmorPhysical"				"0"			// 基础护甲
+		"MagicalResistance"			"0"			// 基础魔抗
+
+		// Attack
+		//----------------------------------------------------------------
+		"AttackCapabilities"		"DOTA_UNIT_CAP_RANGED_ATTACK"	// 攻击方式
+		"AttackDamageMin"			"35"		// 最小攻击力
+		"AttackDamageMax"			"46"		// 最大攻击力
+		"AttackRate"				"2.7"			// 基础攻击间隔
+		"AttackAnimationPoint"		"1"		// 攻击前摇
+		"AttackRange"               "690"       // 攻击范围
+		"ProjectileModel"			"particles/base_attacks/ranged_siege_good.vpcf"
+		"AttackAcquisitionRange"	"800"		// 警戒范围
+
+		// Bounty
+		//----------------------------------------------------------------
+		"BountyXP"					"88"		// Experience earn.
+		"BountyGoldMin"				"66"		// Gold earned min.
+		"BountyGoldMax"				"80"		// Gold earned max.
+
+		// Bounds
+		//----------------------------------------------------------------
+		"BoundsHullName"			"DOTA_HULL_SIZE_REGULAR"
+		"RingRadius"				"40"
+		"HealthBarOffset"			"170"
+
+		// Movement
+		//----------------------------------------------------------------
+		"MovementCapabilities"		"DOTA_UNIT_CAP_MOVE_GROUND"	// 移动方式
+		"MovementSpeed"             "310"                       // 移动速度	
+
+		// Status
+		//----------------------------------------------------------------
+		"StatusHealth"				"600"		// 基础生命
+		"StatusHealthRegen"			"0.0"		// 基础生命回复
+		"StatusMana"				"0"			// 基础魔法
+		"StatusManaRegen"			"0.0"		// 基础魔法回复	 
+		
+		// Vision
+		//----------------------------------------------------------------
+		"VisionDaytimeRange"		"850"		// 白天视野范围
+		"VisionNighttimeRange"		"800"		// 夜晚视野范围
+
+		// Team
+		//----------------------------------------------------------------
+		"CombatClassAttack"			"DOTA_COMBAT_CLASS_ATTACK_SIEGE"	// 攻击类型
+		"CombatClassDefend"			"DOTA_COMBAT_CLASS_DEFEND_STRUCTURE"	// 护甲类型
+		"UnitRelationshipClass"		"DOTA_NPC_UNIT_RELATIONSHIP_TYPE_DEFAULT"
+	}
+
+	//----------------------------------------------------------------------------------------------------------------------dire
+	"npc_dota_creep_dire_melee"	
+	{
+		// General
+		//----------------------------------------------------------------
+		"Model"						"models/creeps/lane_creeps/creep_bad_melee/creep_bad_melee.vmdl"	// 模型
+		"BaseClass"					"npc_dota_creep_lane"
+		"SoundSet"					"n_creep_Melee"
+		"Level"						"1"	// 基础等级
+		"ModelScale" 				"1"	// 模型大小
+
+
+		// Armor
+		//----------------------------------------------------------------
+		"ArmorPhysical"				"2"			// 基础护甲
+		"MagicalResistance"			"0"			// 基础魔抗
+
+		// Attack
+		//----------------------------------------------------------------
+		"AttackCapabilities"		"DOTA_UNIT_CAP_MELEE_ATTACK"	// 攻击方式
+		"AttackDamageMin"			"19"		// 最小攻击力
+		"AttackDamageMax"			"23"		// 最大攻击力
+		"AttackRate"				"1"			// 基础攻击间隔
+		"AttackAnimationPoint"		"0.4"		// 攻击前摇
+		"AttackRange"               "100"                       // 攻击范围
+		"AttackAcquisitionRange"	"800"		// 警戒范围
+
+		// Bounty
+		//----------------------------------------------------------------
+		"BountyXP"					"62"		// Experience earn.
+		"BountyGoldMin"				"38"		// Gold earned min.
+		"BountyGoldMax"				"48"		// Gold earned max.
+
+		// Bounds
+		//----------------------------------------------------------------
+		"BoundsHullName"			"DOTA_HULL_SIZE_REGULAR"
+		"RingRadius"				"40"
+		"HealthBarOffset"			"170"
+
+		// Movement
+		//----------------------------------------------------------------
+		"MovementCapabilities"		"DOTA_UNIT_CAP_MOVE_GROUND"	// 移动方式
+		"MovementSpeed"             "325"                       // 移动速度	
+
+		// Status
+		//----------------------------------------------------------------
+		"StatusHealth"				"550"		// 基础生命
+		"StatusHealthRegen"			"0.0"		// 基础生命回复
+		"StatusMana"				"0"			// 基础魔法
+		"StatusManaRegen"			"0.0"		// 基础魔法回复	 
+		
+		// Vision
+		//----------------------------------------------------------------
+		"VisionDaytimeRange"		"850"		// 白天视野范围
+		"VisionNighttimeRange"		"800"		// 夜晚视野范围
+
+		// Team
+		//----------------------------------------------------------------
+		"CombatClassAttack"			"DOTA_COMBAT_CLASS_ATTACK_BASIC"	// 攻击类型
+		"CombatClassDefend"			"DOTA_COMBAT_CLASS_DEFEND_BASIC"	// 护甲类型
+		"UnitRelationshipClass"		"DOTA_NPC_UNIT_RELATIONSHIP_TYPE_DEFAULT"
+	}
+
+	"npc_dota_creep_dire_range"	
+	{
+		// General
+		//----------------------------------------------------------------
+		"Model"						"models/creeps/lane_creeps/creep_bad_ranged/lane_dire_ranged.vmdl"	// 模型
+		"BaseClass"					"npc_dota_creep_lane"
+		"SoundSet"					"n_creep_Ranged"
+		"Level"						"1"	// 基础等级
+		"ModelScale" 				"0.9"	// 模型大小
+
+
+		// Armor
+		//----------------------------------------------------------------
+		"ArmorPhysical"				"0"			// 基础护甲
+		"MagicalResistance"			"0"			// 基础魔抗
+
+		// Attack
+		//----------------------------------------------------------------
+		"AttackCapabilities"		"DOTA_UNIT_CAP_RANGED_ATTACK"	// 攻击方式
+		"AttackDamageMin"			"21"		// 最小攻击力
+		"AttackDamageMax"			"26"		// 最大攻击力
+		"AttackRate"				"1"			// 基础攻击间隔
+		"AttackAnimationPoint"		"0.4"		// 攻击前摇
+		"AttackRange"               "500"       // 攻击范围
+		"ProjectileModel"			"particles/base_attacks/ranged_badguy.vpcf"
+		"AttackAcquisitionRange"	"800"		// 警戒范围
+
+		// Bounty
+		//----------------------------------------------------------------
+		"BountyXP"					"41"		// Experience earn.
+		"BountyGoldMin"				"43"		// Gold earned min.
+		"BountyGoldMax"				"53"		// Gold earned max.
+
+		// Bounds
+		//----------------------------------------------------------------
+		"BoundsHullName"			"DOTA_HULL_SIZE_REGULAR"
+		"RingRadius"				"40"
+		"HealthBarOffset"			"170"
+
+		// Movement
+		//----------------------------------------------------------------
+		"MovementCapabilities"		"DOTA_UNIT_CAP_MOVE_GROUND"	// 移动方式
+		"MovementSpeed"             "320"                       // 移动速度	
+
+		// Status
+		//----------------------------------------------------------------
+		"StatusHealth"				"300"		// 基础生命
+		"StatusHealthRegen"			"0.0"		// 基础生命回复
+		"StatusMana"				"500"			// 基础魔法
+		"StatusManaRegen"			"0.0"		// 基础魔法回复	 
+		
+		// Vision
+		//----------------------------------------------------------------
+		"VisionDaytimeRange"		"850"		// 白天视野范围
+		"VisionNighttimeRange"		"800"		// 夜晚视野范围
+
+		// Team
+		//----------------------------------------------------------------
+		"CombatClassAttack"			"DOTA_COMBAT_CLASS_ATTACK_PIERCE"	// 攻击类型
+		"CombatClassDefend"			"DOTA_COMBAT_CLASS_DEFEND_BASIC"	// 护甲类型
+		"UnitRelationshipClass"		"DOTA_NPC_UNIT_RELATIONSHIP_TYPE_DEFAULT"
+	}
+
+	"npc_dota_creep_dire_siege"	
+	{
+		// General
+		//----------------------------------------------------------------
+		"Model"						"models/creeps/lane_creeps/creep_bad_siege/creep_bad_siege.vmdl"	// 模型
+		"BaseClass"					"npc_dota_creep_lane"
+		//"SoundSet"					"n_creep_Siege"
+		"Level"						"1"	// 基础等级
+		"ModelScale" 				"0.7"	// 模型大小
+
+
+		// Armor
+		//----------------------------------------------------------------
+		"ArmorPhysical"				"0"			// 基础护甲
+		"MagicalResistance"			"0"			// 基础魔抗
+
+		// Attack
+		//----------------------------------------------------------------
+		"AttackCapabilities"		"DOTA_UNIT_CAP_RANGED_ATTACK"	// 攻击方式
+		"AttackDamageMin"			"35"		// 最小攻击力
+		"AttackDamageMax"			"46"		// 最大攻击力
+		"AttackRate"				"2.7"			// 基础攻击间隔
+		"AttackAnimationPoint"		"1"		// 攻击前摇
+		"AttackRange"               "690"       // 攻击范围
+		"ProjectileModel"			"particles/base_attacks/ranged_siege_bad.vpcf"
+		"AttackAcquisitionRange"	"800"		// 警戒范围
+
+		// Bounty
+		//----------------------------------------------------------------
+		"BountyXP"					"88"		// Experience earn.
+		"BountyGoldMin"				"66"		// Gold earned min.
+		"BountyGoldMax"				"80"		// Gold earned max.
+
+		// Bounds
+		//----------------------------------------------------------------
+		"BoundsHullName"			"DOTA_HULL_SIZE_REGULAR"
+		"RingRadius"				"40"
+		"HealthBarOffset"			"170"
+
+		// Movement
+		//----------------------------------------------------------------
+		"MovementCapabilities"		"DOTA_UNIT_CAP_MOVE_GROUND"	// 移动方式
+		"MovementSpeed"             "310"                       // 移动速度	
+
+		// Status
+		//----------------------------------------------------------------
+		"StatusHealth"				"600"		// 基础生命
+		"StatusHealthRegen"			"0.0"		// 基础生命回复
+		"StatusMana"				"0"			// 基础魔法
+		"StatusManaRegen"			"0.0"		// 基础魔法回复	 
+		
+		// Vision
+		//----------------------------------------------------------------
+		"VisionDaytimeRange"		"850"		// 白天视野范围
+		"VisionNighttimeRange"		"800"		// 夜晚视野范围
+
+		// Team
+		//----------------------------------------------------------------
+		"CombatClassAttack"			"DOTA_COMBAT_CLASS_ATTACK_SIEGE"	// 攻击类型
+		"CombatClassDefend"			"DOTA_COMBAT_CLASS_DEFEND_STRUCTURE"	// 护甲类型
+		"UnitRelationshipClass"		"DOTA_NPC_UNIT_RELATIONSHIP_TYPE_DEFAULT"
 	}
 }
