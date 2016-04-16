@@ -392,6 +392,8 @@
 				{
 					"MODIFIER_STATE_SILENCED"						"MODIFIER_STATE_VALUE_ENABLED"
 				}
+				"EffectName"		"particles/generic_gameplay/generic_silenced.vpcf"
+				"EffectAttachType"	"follow_overhead"
 			}
 		}
 	}
@@ -1537,6 +1539,153 @@
 						"Function"			"void_death_om"
 					}
 				}
+			}
+		}
+	}
+	//=================================================================================================================
+	// 力丸-烟幕
+	// Author: Sniper
+	// Date: 2016.04.16
+	//=================================================================================================================
+	"riki_smoke_screen_om"
+	{
+		// General
+		//-------------------------------------------------------------------------------------------------------------
+		"BaseClass"						"ability_datadriven"
+		"AbilityBehavior"				"DOTA_ABILITY_BEHAVIOR_AOE | DOTA_ABILITY_BEHAVIOR_POINT | DOTA_ABILITY_BEHAVIOR_IGNORE_BACKSWING"
+		"AbilityUnitDamageType"			"DAMAGE_TYPE_MAGICAL"
+		"SpellImmunityType"				"SPELL_IMMUNITY_ENEMIES_NO"
+		"AbilityTextureName"            "riki_smoke_screen"
+	
+		// Casting
+		//-------------------------------------------------------------------------------------------------------------
+		"AOERadius"						"%radius"
+		"AbilityCastRange"				"550"
+		"AbilityCastPoint"				"0.4 0.4 0.4 0.4"
+	
+		// Time		
+		//-------------------------------------------------------------------------------------------------------------
+		"AbilityCooldown"				"11"
+		"AbilityDuration"				"%duration"
+	
+		// Cost
+		//-------------------------------------------------------------------------------------------------------------
+		"AbilityManaCost"				"75 80 85 90"
+	
+		// Special
+		//-------------------------------------------------------------------------------------------------------------
+		"AbilitySpecial"
+		{
+			"01"
+			{
+				"var_type"					"FIELD_INTEGER"
+				"radius"					"250 275 300 325"
+			}
+			"02"
+			{
+				"var_type"					"FIELD_INTEGER"
+				"miss_rate"					"40 50 60 70"
+			}
+			"03"
+			{
+				"var_type"					"FIELD_INTEGER"
+				"movement_speed_reduction"	"-25 -25 -25 -25"
+			}
+			"04"
+			{
+				"var_type"					"FIELD_INTEGER"
+				"damage"					"15 30 45 60"
+			}
+			"05"
+			{
+				"var_type"					"FIELD_INTEGER"
+				"tick_rate"					"1"
+			}
+			"05"
+			{
+				"var_type"					"FIELD_INTEGER"
+				"duration"					"6"
+			}
+		}
+		"precache"
+		{
+			"soundfile"			"soundevents/game_sounds_heroes/game_sounds_riki.vsndevts"
+			"particle"			"particles/units/heroes/hero_riki/riki_smokebomb.vpcf"
+		}
+		"OnSpellStart"
+		{
+		 	"CreateThinker"
+		 	{
+		 		"ModifierName"	"modifier_smoke_screen_thinker"
+		 		"Target" 		"POINT"
+		 	} 	
+		} 
+	
+		"Modifiers"
+		{
+			"modifier_smoke_screen_thinker"
+			{
+				"Duration"			"%duration"
+	
+				"Aura"					"modifier_smoke_screen"
+				"Aura_Radius"			"%radius"
+				"Aura_Teams"			"DOTA_UNIT_TARGET_TEAM_ENEMY"
+				"Aura_Types"			"DOTA_UNIT_TARGET_HERO | DOTA_UNIT_TARGET_BASIC | DOTA_UNIT_TARGET_MECHANICAL"
+	
+				"OnCreated"
+				{
+					"FireSound"
+					{
+						"EffectName"	"Hero_Riki.Smoke_Screen"
+						"Target" 		"TARGET"
+					}
+					"AttachEffect"
+					{
+						"EffectName"        "particles/units/heroes/hero_riki/riki_smokebomb.vpcf"
+						"EffectAttachType"  "follow_origin"
+						"Target"            "TARGET"
+						"ControlPoints"
+						{
+							"00" "0 0 0"
+							"01" "%radius %radius %radius"
+						}
+					}
+				}
+			}
+	
+			"modifier_smoke_screen"
+			{
+				"IsDebuff"		"1"
+				"ThinkInterval"	"%tick_rate"
+				"OnCreated"
+				{
+					"Damage"
+					{
+						"Target"		 "TARGET"
+						"Type"			 "DAMAGE_TYPE_MAGICAL"
+						"Damage"		 "%damage"
+					}
+				}
+				"Properties"
+				{
+					"MODIFIER_PROPERTY_MOVESPEED_BONUS_PERCENTAGE"	"%movement_speed_reduction"
+					"MODIFIER_PROPERTY_MISS_PERCENTAGE"				"%miss_rate"
+				}
+				"OnIntervalThink"
+				{
+					"Damage"
+					{
+						"Target"		 "TARGET"
+						"Type"			 "DAMAGE_TYPE_MAGICAL"
+						"Damage"		 "%damage"
+					}
+				}
+				"States"
+				{
+					"MODIFIER_STATE_SILENCED"						"MODIFIER_STATE_VALUE_ENABLED"
+				}
+				"EffectName"		"particles/generic_gameplay/generic_silenced.vpcf"
+				"EffectAttachType"	"follow_overhead"
 			}
 		}
 	}
