@@ -52,4 +52,19 @@
 		"override_hero"				"npc_dota_hero_riki"						//力丸
 		"Ability1"					"riki_smoke_screen_om"
 	}
+	"npc_dota_hero_chaos_knight_om"												//混沌骑士
+	{
+		"override_hero"				"npc_dota_hero_chaos_knight"			
+		"Ability1"					"chaos_knight_chaos_bolt_om"
+	}
+	"npc_dota_hero_bounty_hunter_om"											//赏金猎人
+	{
+		"override_hero"				"npc_dota_hero_bounty_hunter"			
+		"Ability1"					"bounty_hunter_shuriken_toss_om"
+	}
+	"npc_dota_hero_ancient_apparition_om"										//远古冰魄
+	{
+		"override_hero"				"npc_dota_hero_ancient_apparition"			
+		"Ability1"					"ancient_apparition_cold_feet_om"
+	}
 }
